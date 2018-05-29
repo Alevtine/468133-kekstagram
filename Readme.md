@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [alevtine](https://up.htmlacademy.ru/javascript/14/user/468133).
-* Наставник: `Неизвестно`.
+* Наставник: `*`.
 
 ---
 
