@@ -10,6 +10,8 @@ var LIKES_LIMITS = {
   max: 200
 };
 
+var POSTED_COMMENTS_LIMIT = 2;
+
 var COMMENTS_LIST = ['Всё отлично!', 'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
@@ -27,7 +29,6 @@ var pictureTemplate = document.querySelector('#picture').content.querySelector('
 var picturesBlock = document.querySelector('.pictures');
 var commentsBlock = document.querySelector('.social__comments');
 var commentNode = document.querySelector('.social__comment');
-commentNode.classList.remove('.social__comment');
 
 var urlNumbersArray = [];
 for (var j = URL_LIMITS.min; j <= URL_LIMITS.max; j++) {
@@ -68,7 +69,7 @@ pictures.forEach(function (item) {
 
 
 var removeOldComments = function () {
-  var commentsLi = commentsBlock.children;
+  var commentsLi = commentsBlock.querySelectorAll('li');
   for (var i = 0; i < commentsLi.length; i++) {
     if (commentsLi[i].className !== 'social__comment social__comment--text') {
       commentsLi[i].remove();
@@ -77,12 +78,13 @@ var removeOldComments = function () {
 };
 
 var addComment = function (picture) {
-  removeOldComments();
-  var clonedComment = commentNode.cloneNode(true);
-  clonedComment.classList.add('social__comment--text');
-  clonedComment.querySelector('img').src = 'img/avatar-' + getRandomValue(1, COMMENTS_LIST.length) + '.svg';
-  clonedComment.querySelector('p').textContent = picture.comments[getRandomValue(0, COMMENTS_LIST.length - 1)];
-  commentsBlock.appendChild(clonedComment);
+  for (var i = 0; i < POSTED_COMMENTS_LIMIT; i++) {
+    var clonedComment = commentNode.cloneNode(true);
+    clonedComment.classList.add('social__comment--text');
+    clonedComment.querySelector('img').src = 'img/avatar-' + getRandomValue(1, COMMENTS_LIST.length) + '.svg';
+    clonedComment.querySelector('p').textContent = picture.comments[getRandomValue(0, COMMENTS_LIST.length - 1)];
+    commentsBlock.appendChild(clonedComment);
+  }
 };
 
 var generateBigPicture = function (picture) {
@@ -91,7 +93,7 @@ var generateBigPicture = function (picture) {
   document.querySelector('.comments-count').textContent = picture.commentsCount;
   document.querySelector('.social__caption').textContent = picture.description;
   addComment(picture);
-  addComment(picture);
+  removeOldComments();
 };
 
 document.querySelector('.big-picture').classList.remove('hidden');
