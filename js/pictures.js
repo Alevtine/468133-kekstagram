@@ -25,6 +25,7 @@ var DESCRIPTIONS_LIST = ['Тестим новую камеру!',
   'Цените каждое мгновенье. Цените тех, кто рядом с вами и отгоняйте все сомненья. Не обижайте всех словами......',
   'Вот это тачка!'];
 
+
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture__link');
 var picturesBlock = document.querySelector('.pictures');
 var commentsBlock = document.querySelector('.social__comments');
@@ -77,7 +78,7 @@ var removeOldComments = function () {
   }
 };
 
-var addComment = function (picture) {
+var addComments = function (picture) {
   for (var i = 0; i < POSTED_COMMENTS_LIMIT; i++) {
     var clonedComment = commentNode.cloneNode(true);
     clonedComment.classList.add('social__comment--text');
@@ -92,12 +93,99 @@ var generateBigPicture = function (picture) {
   document.querySelector('.likes-count').textContent = picture.likes;
   document.querySelector('.comments-count').textContent = picture.commentsCount;
   document.querySelector('.social__caption').textContent = picture.description;
-  addComment(picture);
+  addComments(picture);
   removeOldComments();
+  document.querySelector('.big-picture').classList.remove('hidden');
+  document.querySelector('.social__comment-count').classList.add('visually-hidden');
+  document.querySelector('.social__loadmore').classList.add('visually-hidden');
 };
 
-document.querySelector('.big-picture').classList.remove('hidden');
-document.querySelector('.social__comment-count').classList.add('visually-hidden');
-document.querySelector('.social__loadmore').classList.add('visually-hidden');
 
-generateBigPicture(pictures[0]);
+// generateBigPicture(pictures[0]);
+
+var uploadInput = document.querySelector('#upload-file');
+var uploadBlock = document.querySelector('.img-upload__overlay');
+var closeuploadBlock = document.querySelector('#upload-cancel');
+var uploadForm = document.querySelector('#upload-select-image');
+
+
+var openUploadBlock = function () {
+  uploadBlock.classList.remove('hidden');
+};
+
+var closeUploadBlock = function () {
+  uploadBlock.classList.add('hidden');
+  picWithEffect.className = 'img-upload__preview';
+  // uploadForm.reset()
+  // uploadInput.value = '';
+};
+
+
+uploadInput.addEventListener('change', openUploadBlock);
+
+closeuploadBlock.addEventListener('click', closeUploadBlock);
+
+
+var picWithEffect = document.querySelector('.img-upload__preview');
+var effectsList = document.querySelector('.effects__list');
+
+
+var onInputEffectChange = function (evt) {
+  picWithEffect.className = 'img-upload__preview';
+  picWithEffect.classList.toggle('effects__preview--' + evt.target.value);
+};
+
+effectsList.addEventListener('change', onInputEffectChange);
+
+var pin = document.querySelector('.scale__pin ');
+var scaleInput = document.querySelector('.scale__value'); // (.value)
+var uploadWrapper = document.querySelector('.img-upload__wrapper');
+var SCALE_LIMITS = {
+  min: 0,
+  max: 453
+};
+
+var onPinMousedown = function (evt) {
+
+  window.pinBeginCoords = {
+    x: evt.clientX
+  };
+
+  document.addEventListener('mousemove', onPinMousemove);
+  document.addEventListener('mouseup', onPinMouseup);
+};
+
+var onPinMousemove = function (evt) {
+
+  var shift = {
+    x: pinBeginCoords.x - evt.clientX
+  };
+
+  window.pinBeginCoords = {
+    x: evt.clientX
+  };
+
+  var pinEndCoord = {
+    x: pin.offsetLeft - shift.x
+  };
+
+  if (pinEndCoord.x < SCALE_LIMITS.min) {
+    pinEndCoord.x = SCALE_LIMITS.min;
+  }
+
+  if (pinEndCoord.x > SCALE_LIMITS.max) {
+    pinEndCoord.x = SCALE_LIMITS.max;
+  }
+
+
+  pin.style.left = pinEndCoord.x + 'px';
+
+};
+
+var onPinMouseup = function () {
+  document.removeEventListener('mousemove', onPinMousemove);
+  document.removeEventListener('mouseup', onPinMouseup);
+};
+
+
+pin.addEventListener('mousedown', onPinMousedown);
