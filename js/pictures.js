@@ -10,6 +10,13 @@ var LIKES_LIMITS = {
   max: 200
 };
 
+var EFFECTS_RANGE = {
+  min: 1,
+  max: 3
+};
+
+var PERCENT_AMOUNT = 100;
+
 var POSTED_COMMENTS_LIMIT = 2;
 
 var COMMENTS_LIST = ['Всё отлично!', 'В целом всё неплохо. Но не всё.',
@@ -105,7 +112,7 @@ var generateBigPicture = function (picture) {
 
 var uploadInput = document.querySelector('#upload-file');
 var uploadBlock = document.querySelector('.img-upload__overlay');
-var closeuploadBlock = document.querySelector('#upload-cancel');
+var cancelUploadBlock = document.querySelector('#upload-cancel');
 var uploadForm = document.querySelector('#upload-select-image');
 
 
@@ -115,7 +122,7 @@ var openUploadBlock = function () {
 
 var closeUploadBlock = function () {
   uploadBlock.classList.add('hidden');
-  picWithEffect.className = 'img-upload__preview';
+  picPreview.className = 'img-upload__preview';
   // uploadForm.reset()
   // uploadInput.value = '';
 };
@@ -123,27 +130,33 @@ var closeUploadBlock = function () {
 
 uploadInput.addEventListener('change', openUploadBlock);
 
-closeuploadBlock.addEventListener('click', closeUploadBlock);
+cancelUploadBlock.addEventListener('click', closeUploadBlock);
 
 
-var picWithEffect = document.querySelector('.img-upload__preview');
+var picPreview = document.querySelector('.img-upload__preview');
 var effectsList = document.querySelector('.effects__list');
-
-
-var onInputEffectChange = function (evt) {
-  picWithEffect.className = 'img-upload__preview';
-  picWithEffect.classList.toggle('effects__preview--' + evt.target.value);
-};
-
-effectsList.addEventListener('change', onInputEffectChange);
-
 var pin = document.querySelector('.scale__pin ');
-var scaleInput = document.querySelector('.scale__value'); // (.value)
+var scaleInput = document.querySelector('.scale__value');
+scaleInput.setAttribute('value', '');
 var uploadWrapper = document.querySelector('.img-upload__wrapper');
+uploadWrapper.setAttribute('onselectstart', 'return false');
+var scaleLevel = document.querySelector('.scale__level');
 var SCALE_LIMITS = {
   min: 0,
   max: 453
 };
+
+var onInputEffectChange = function (evt) {
+  picPreview.className = 'img-upload__preview';
+  picPreview.classList.toggle('effects__preview--' + evt.target.value);
+  picPreview.style.filter = '';
+  scaleLevel.style.width = PERCENT_AMOUNT + '%';
+  pin.style.left = SCALE_LIMITS.max + 'px';
+
+};
+
+effectsList.addEventListener('change', onInputEffectChange);
+
 
 var onPinMousedown = function (evt) {
 
@@ -153,12 +166,13 @@ var onPinMousedown = function (evt) {
 
   document.addEventListener('mousemove', onPinMousemove);
   document.addEventListener('mouseup', onPinMouseup);
+
 };
 
 var onPinMousemove = function (evt) {
 
   var shift = {
-    x: pinBeginCoords.x - evt.clientX
+    x: window.pinBeginCoords.x - evt.clientX
   };
 
   window.pinBeginCoords = {
@@ -180,12 +194,36 @@ var onPinMousemove = function (evt) {
 
   pin.style.left = pinEndCoord.x + 'px';
 
+  var slipStep = pinEndCoord.x / SCALE_LIMITS.max;
+
+  scaleLevel.style.width = Math.floor(PERCENT_AMOUNT * slipStep) + '%';
+
+
+  picPreview.classList.forEach(function (item) {
+    var maxSlipValue = EFFECTS_RANGE.max * slipStep;
+    switch (item) {
+      case 'effects__preview--chrome': picPreview.style.filter = 'grayscale' + '(' + slipStep + ')';
+        break;
+      case 'effects__preview--sepia': picPreview.style.filter = 'sepia' + '(' + slipStep + ')';
+        break;
+      case 'effects__preview--marvin': picPreview.style.filter = 'invert' + '(' + Math.floor(PERCENT_AMOUNT * slipStep) + '%' + ')';
+        break;
+      case 'effects__preview--phobos': picPreview.style.filter = 'blur' + '(' + maxSlipValue + 'px' + ')';
+        break;
+      case 'effects__preview--heat':
+        if (maxSlipValue > EFFECTS_RANGE.min) {
+          picPreview.style.filter = 'brightness' + '(' + maxSlipValue + ')';
+        }
+        break;
+    }
+  });
+
+  scaleInput.setAttribute('value', Math.floor(PERCENT_AMOUNT * slipStep));
 };
 
 var onPinMouseup = function () {
   document.removeEventListener('mousemove', onPinMousemove);
   document.removeEventListener('mouseup', onPinMouseup);
 };
-
 
 pin.addEventListener('mousedown', onPinMousedown);
