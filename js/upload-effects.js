@@ -36,6 +36,7 @@
 
   var closeUploadBlock = function () {
     uploadBlock.classList.add('hidden');
+    picPreview.style.filter = '';
     picPreview.className = 'img-upload__preview';
   // uploadForm.reset()
   // uploadInput.value = '';
@@ -137,7 +138,9 @@
   cancelUploadBlock.addEventListener('click', closeUploadBlock);
 
   document.addEventListener('keydown', function (evt) {
-    window.utils.isEscPress(evt, closeUploadBlock);
+    if (document.querySelector('.text__hashtags') !== document.activeElement && document.querySelector('.text__description') !== document.activeElement) {
+      window.utils.isEscPress(evt, closeUploadBlock);
+    }
   });
 
 })();

@@ -118,6 +118,9 @@
   var hideBigPicture = function () {
     document.querySelector('body').classList.remove('modal-open');
     document.querySelector('.big-picture').classList.add('hidden');
+    document.removeEventListener('keydown', function (evt) {
+      window.utils.isEscPress(evt, hideBigPicture);
+    });
   };
 
   bigPictureCancel.addEventListener('click', hideBigPicture);
