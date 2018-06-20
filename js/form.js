@@ -18,7 +18,7 @@
           flag = false;
         }
       }
-      // доб пров на проб
+
       if (flag) {
         evt.target.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
       } else if (hashtagsArray[i][0] !== '#') {
@@ -29,6 +29,8 @@
         evt.target.setCustomValidity('хеш-тег не может состоять только из одной решётки');
       } else if (hashtagsArray.length > 5) {
         evt.target.setCustomValidity('нельзя указать больше пяти хэш-тегов');
+      } else if (hashtagInput.value.match(/#/g).length > 1 && hashtagInput.value.split(' ').length - 1 !== hashtagInput.value.match(/#/g).length - 1) {
+        evt.target.setCustomValidity('хэш-теги пробелами разделяйте');
       } else {
         evt.target.setCustomValidity('');
       }
