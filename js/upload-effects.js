@@ -70,10 +70,6 @@
     scaleInput.setAttribute('value', '100');
   };
 
-  var onPinMouseup = function () {
-    document.removeEventListener('mousemove', onPinMousemove);
-    document.removeEventListener('mouseup', onPinMouseup);
-  };
 
   var onPinMousedown = function (evt) {
     window.pinBeginCoords = evt.clientX;
@@ -127,6 +123,10 @@
     scaleInput.setAttribute('value', saturationLevel);
   };
 
+  var onPinMouseup = function () {
+    document.removeEventListener('mousemove', onPinMousemove);
+    document.removeEventListener('mouseup', onPinMouseup);
+  };
 
   pin.addEventListener('mousedown', onPinMousedown);
 

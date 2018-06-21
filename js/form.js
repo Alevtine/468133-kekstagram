@@ -22,7 +22,7 @@
       if (flag) {
         evt.target.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
       } else if (hashtagsArray[i][0] !== '#') {
-        evt.target.setCustomValidity('хэш-тег начинается с символа # (решётка)');
+        evt.target.setCustomValidity('хеш-тег начинается с символа # (решётка)');
       } else if (hashtagsArray[i].length > 20) {
         evt.target.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
       } else if (hashtagsArray[i] === '#') {
