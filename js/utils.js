@@ -33,6 +33,30 @@
         });
         reader.readAsDataURL(file);
       }
+    },
+
+    slider: function (elem, tune) {
+      var onMouseDown = function (evt) {
+        var beginCoords = evt.clientX;
+
+        var onMouseMove = function (evtMmove) {
+
+          var shift = beginCoords - evtMmove.clientX;
+          beginCoords = evtMmove.clientX;
+          var endCoord = elem.offsetLeft - shift;
+
+          tune(endCoord);
+          evtMmove.preventDefault();
+        };
+
+        var onMouseUp = function () {
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
+        };
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      };
+      elem.addEventListener('mousedown', onMouseDown);
     }
   };
 

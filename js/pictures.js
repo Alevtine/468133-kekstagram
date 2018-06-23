@@ -52,15 +52,15 @@
   var generatePictures = function () {
     var pictures = [];
 
-    for (var i = 0; i < urlNumbersArray.length; i++) {
+    urlNumbersArray.forEach(function (item) {
       var picture = {
-        url: 'photos/' + urlNumbersArray[i] + '.jpg',
+        url: 'photos/' + item + '.jpg',
         likes: getRandomValue(LIKES_LIMITS.min, LIKES_LIMITS.max),
         comments: getComments(),
         description: DESCRIPTIONS_LIST[getRandomValue(0, DESCRIPTIONS_LIST.length - 1)]
       };
       pictures.push(picture);
-    }
+    });
 
     return pictures;
   };
@@ -127,5 +127,6 @@
 
   document.addEventListener('keydown', function (evt) {
     window.utils.isEscPress(evt, hideBigPicture);
+
   });
 })();

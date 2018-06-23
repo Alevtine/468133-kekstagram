@@ -2,7 +2,10 @@
 
 (function () {
 
-  var hashtagInput = document.querySelector('.text__hashtags'); // uploadForm.elements.hashtags
+  var hashtagInput = document.querySelector('.text__hashtags');
+  var uploadForm = document.querySelector('#upload-select-image');
+  var errorMessage = document.querySelector('.img-upload__message--error');
+
 
   var onHashtagInput = function (evt) {
     evt.preventDefault();
@@ -25,11 +28,11 @@
         evt.target.setCustomValidity('хеш-тег начинается с символа # (решётка)');
       } else if (hashtagsArray[i].length > 20) {
         evt.target.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
-      } else if (hashtagsArray[i] === '#') {
+      } else if (hashtagsArray[i] === '#' || hashtagsArray[0] === '#') {
         evt.target.setCustomValidity('хеш-тег не может состоять только из одной решётки');
       } else if (hashtagsArray.length > 5) {
         evt.target.setCustomValidity('нельзя указать больше пяти хэш-тегов');
-      } else if (hashtagInput.value.match(/#/g).length > 1 && hashtagInput.value.split(' ').length - 1 !== hashtagInput.value.match(/#/g).length - 1) {
+      } else if (hashtagInput.value.match(/#/g).length > 1 && hashtagsArray.length !== hashtagInput.value.match(/#/g).length) {
         evt.target.setCustomValidity('хэш-теги пробелами разделяйте');
       } else {
         evt.target.setCustomValidity('');
@@ -45,5 +48,29 @@
 
 
   hashtagInput.addEventListener('change', onHashtagInput);
+
+  window.onSuccess = function () {
+    window.uploadEffects.onClose();
+    uploadForm.reset();
+  };
+
+  window.onError = function () {
+    errorMessage.classList.remove('hidden');
+    document.querySelector('body').appendChild(errorMessage);
+  };
+
+
+  uploadForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+
+    window.backend.postData(
+        new FormData(uploadForm),
+        function () {
+          window.onSuccess();
+        },
+        function () {
+          window.onError();
+        });
+  });
 
 })();
