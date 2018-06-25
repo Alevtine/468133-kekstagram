@@ -21,6 +21,10 @@
       }
     },
 
+    getRandomValue: function (min, max) {
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    },
+
     fileChooser: function (file, upload) {
       var fileName = file.name.toLowerCase();
       var matches = FILE_TYPES.some(function (item) {

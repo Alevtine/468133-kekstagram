@@ -39,22 +39,6 @@
   var resizeValue = SIZE_RANGE.max;
 
 
-  window.uploadEffects = {
-    onClose: function () {
-      uploadBlock.classList.add('hidden');
-      picPreview.style.filter = '';
-      uploadBlock.querySelector('.text__hashtags').style.outline = '';
-    },
-
-    onOpen: function () {
-      uploadBlock.classList.remove('hidden');
-      scaleLine.classList.add('hidden');
-      scaleInput.setAttribute('value', '');
-      picPreview.style.transform = 'scale(1)';
-      picPreview.className = 'img-upload__preview';
-    }
-  };
-
   var openUploadBlock = function () {
     window.uploadEffects.onOpen();
     document.addEventListener('keydown', onEscCloseUpload);
@@ -146,15 +130,33 @@
     }
   };
 
+  window.uploadEffects = {
+    onClose: function () {
+      uploadBlock.classList.add('hidden');
+      picPreview.style.filter = '';
+      uploadBlock.querySelector('.text__hashtags').style.outline = '';
+    },
+
+    onOpen: function () {
+      uploadBlock.classList.remove('hidden');
+      scaleLine.classList.add('hidden');
+      scaleInput.setAttribute('value', '');
+      picPreview.style.transform = 'scale(1)';
+      picPreview.className = 'img-upload__preview';
+    }
+  };
+
+  window.utils.slider(pin, changeSaturation);
+
+  effectsList.addEventListener('change', onInputEffectChange);
+  resizeMinusButton.addEventListener('click', onClickResize);
+  resizePlusButton.addEventListener('click', onClickResize);
+  cancelUploadBlock.addEventListener('click', closeUploadBlock);
 
   uploadInput.addEventListener('change', function () {
     openUploadBlock();
     window.utils.fileChooser(uploadInput.files[0], picPreview.querySelector('img'));
+
   });
-  effectsList.addEventListener('change', onInputEffectChange);
-  resizeMinusButton.addEventListener('click', onClickResize);
-  resizePlusButton.addEventListener('click', onClickResize);
-  window.utils.slider(pin, changeSaturation);
-  cancelUploadBlock.addEventListener('click', closeUploadBlock);
 
 })();
