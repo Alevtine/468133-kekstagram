@@ -14,10 +14,10 @@
 
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture__link');
   var picturesBlock = document.querySelector('.pictures');
+  var filtersBlock = document.querySelector('.img-filters');
   var commentsBlock = document.querySelector('.social__comments');
-  var bigPictureCancel = document.querySelector('#picture-cancel');
   var moreCommentsButton = document.querySelector('.social__loadmore');
-
+  var bigPictureCancel = document.querySelector('#picture-cancel');
 
   var removeOldComments = function () {
     var commentsLi = commentsBlock.querySelectorAll('li');
@@ -61,6 +61,7 @@
 
     }, function () {});
 
+    filtersBlock.classList.remove('img-filters--inactive');
     return picturesArr;
   };
 

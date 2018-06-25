@@ -5,17 +5,26 @@
   var hashtagInput = document.querySelector('.text__hashtags');
   var uploadForm = document.querySelector('#upload-select-image');
 
-  var errorMessageTemplate = document.querySelector('#picture').content.querySelector('.img-upload__message--error');
-  var errorMessage = errorMessageTemplate.cloneNode(true);
-  document.body.appendChild(errorMessage);
+  var errorBlockTemplate = document.querySelector('#picture').content.querySelector('.img-upload__message--error');
+  var errorBlock = errorBlockTemplate.cloneNode(true);
+
+  var removeErrorBlock = function () {
+    if (document.contains(errorBlock)) {
+      errorBlock.parentNode.removeChild(errorBlock);
+      document.body.style.overflow = '';
+    }
+  };
 
   var onHashtagInput = function (evt) {
+
     evt.target.setCustomValidity('');
     evt.preventDefault();
+
     if (!hashtagInput.value) {
       hashtagInput.style.outline = '';
       return;
     }
+
     var hashtagsArray = evt.target.value.split(' ');
 
     if (hashtagsArray.length > 5) {
@@ -51,7 +60,6 @@
       }
     }
 
-
     if (hashtagInput.validity.valid) {
       hashtagInput.style.outline = '';
     } else {
@@ -61,29 +69,34 @@
 
   hashtagInput.addEventListener('change', onHashtagInput);
 
-  window.onSuccess = function () {
-    window.uploadEffects.onClose();
-    uploadForm.reset();
-  };
-
-  window.onError = function () {
-    errorMessage.classList.remove('hidden');
-    errorMessage.style.display = 'block';
-    errorMessage.style.zIndex = '10';
-  };
-
-
   uploadForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-
     window.backend.postData(
         new FormData(uploadForm),
         function () {
-          window.onSuccess();
+          window.form.onSuccess();
         },
-        function () {
-          window.onError();
+        function (errorMessage) {
+          window.form.onError(errorMessage);
         });
   });
+
+  window.form = {
+    onSuccess: function () {
+      window.uploadEffects.onClose();
+      uploadForm.reset();
+    },
+
+    onError: function (errorMessage) {
+      document.body.appendChild(errorBlock);
+      errorBlock.classList.remove('hidden');
+      errorBlock.insertAdjacentHTML('beforeend', '<br>' + errorMessage);
+      errorBlock.style.display = 'block';
+      errorBlock.style.zIndex = '10';
+      document.body.style.overflow = 'hidden';
+      errorBlock.addEventListener('click', removeErrorBlock);
+      setTimeout(removeErrorBlock, 5000);
+    }
+  };
 
 })();

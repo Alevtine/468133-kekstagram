@@ -17,7 +17,7 @@
       if (xhr.status === 200) {
         onSuccess(xhr.response);
       } else {
-        onError('Получен ответ: ' + xhr.status + ' ' + xhr.statusText);
+        onError('Получен ответ: ' + xhr.status + '. ' + xhr.response[0].errorMessage);
       }
     });
 
