@@ -64,9 +64,6 @@
     return picturesArr;
   };
 
-  var pictures = generatePictures();
-
-
   var generateBigPicture = function (picture) {
     document.querySelector('.big-picture__img').querySelector('img').src = picture.url;
     document.querySelector('.likes-count').textContent = picture.likes;
@@ -90,7 +87,7 @@
       }
 
       moreCommentsButton.addEventListener('click', function () {
-        if (array) {
+        if (array.length) {
           var arrCommentsPlus = array.splice(0, SHOWED_COMMENTS);
           arrCommentsPlus.forEach(function (item) {
             insertCommentNode(item);
@@ -127,5 +124,7 @@
   document.addEventListener('keydown', function (evt) {
     window.utils.isEscPress(evt, hideBigPicture);
   });
+
+  generatePictures();
 
 })();
