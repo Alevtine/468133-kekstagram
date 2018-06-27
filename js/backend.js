@@ -4,7 +4,7 @@
 
   var URL_GET = 'https://js.dump.academy/kekstagram/data';
   var URL_POST = 'https://js.dump.academy/kekstagram';
-  var TIMEOUT = 2000;
+  var TIMEOUT = 5000;
 
   var request = function (onSuccess, onError, method, url, data) {
 
