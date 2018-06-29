@@ -5,7 +5,8 @@
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-
+  var DEBOUNCE_INTERVAL = 5000;
+  var lastTimeout;
 
   window.utils = {
 
@@ -79,15 +80,11 @@
       }
     },
 
-    switchClass: function (elem, tune, which) {
-      switch (tune) {
-        case 'add':
-          elem.classList.add(which);
-          break;
-        case 'remove':
-          elem.classList.remove(which);
-          break;
+    debounce: function (action) {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
       }
+      lastTimeout = window.setTimeout(action, DEBOUNCE_INTERVAL);
     }
   };
 
