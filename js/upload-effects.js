@@ -106,7 +106,7 @@
   };
 
 
-  var onClickResize = function (evt) {
+  var onResize = function (evt) {
     switch (evt.target) {
       case resizeMinusButton:
         if (resizeValue > SIZE_RANGE.min) {
@@ -149,14 +149,13 @@
   window.utils.slider(pin, changeSaturation);
 
   effectsList.addEventListener('change', onInputEffectChange);
-  resizeMinusButton.addEventListener('click', onClickResize);
-  resizePlusButton.addEventListener('click', onClickResize);
+  resizeMinusButton.addEventListener('click', onResize);
+  resizePlusButton.addEventListener('click', onResize);
   cancelUploadBlock.addEventListener('click', closeUploadBlock);
 
   uploadInput.addEventListener('change', function () {
     openUploadBlock();
     window.utils.fileChooser(uploadInput.files[0], picPreview.querySelector('img'));
-
   });
 
 })();

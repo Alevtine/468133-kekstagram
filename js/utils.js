@@ -5,6 +5,7 @@
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var DEBOUNCE_INTERVAL = 500;
 
 
   window.utils = {
@@ -23,6 +24,16 @@
 
     getRandomValue: function (min, max) {
       return Math.floor(Math.random() * (max - min + 1) + min);
+    },
+
+    shuffle: function (array) {
+      for (var i = 0; i < array.length; i++) {
+        var swapIdx = Math.floor(Math.random() * array.length);
+        var tmp = array[swapIdx];
+        array[swapIdx] = array[i];
+        array[i] = tmp;
+      }
+      return array;
     },
 
     fileChooser: function (file, upload) {
@@ -61,6 +72,33 @@
         document.addEventListener('mouseup', onMouseUp);
       };
       elem.addEventListener('mousedown', onMouseDown);
+    },
+
+    debounce: function (fun) {
+      var lastTimeout = null;
+
+      return function () {
+        var args = arguments;
+        if (lastTimeout) {
+          window.clearTimeout(lastTimeout);
+        }
+        lastTimeout = window.setTimeout(function () {
+          fun.apply(null, args);
+        }, DEBOUNCE_INTERVAL);
+      };
+    },
+
+    removeNodes: function (elem) {
+      for (var i = 0; i < elem.length; i++) {
+        elem[i].remove();
+      }
+    },
+
+    removeErrorBlock: function (elem) {
+      if (document.contains(elem)) {
+        elem.parentNode.removeChild(elem);
+        document.body.style.overflow = '';
+      }
     }
   };
 

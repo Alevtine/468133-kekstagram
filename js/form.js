@@ -2,18 +2,14 @@
 
 (function () {
 
+  var HASHTAG_LENGTH = 20;
+  var HASHTAGS_QTTY = 5;
+
   var hashtagInput = document.querySelector('.text__hashtags');
   var uploadForm = document.querySelector('#upload-select-image');
 
   var errorBlockTemplate = document.querySelector('#picture').content.querySelector('.img-upload__message--error');
   var errorBlock = errorBlockTemplate.cloneNode(true);
-
-  var removeErrorBlock = function () {
-    if (document.contains(errorBlock)) {
-      errorBlock.parentNode.removeChild(errorBlock);
-      document.body.style.overflow = '';
-    }
-  };
 
   var onHashtagInput = function (evt) {
 
@@ -27,7 +23,7 @@
 
     var hashtagsArray = evt.target.value.split(' ');
 
-    if (hashtagsArray.length > 5) {
+    if (hashtagsArray.length > HASHTAGS_QTTY) {
       evt.target.setCustomValidity('нельзя указать больше пяти хэш-тегов');
     } else if (hashtagsArray.length !== (hashtagInput.value.match(/#/g) || []).length) {
       evt.target.setCustomValidity('хэш-теги пробелами разделяйте');
@@ -49,8 +45,8 @@
             case hashtagsArray[i][0] !== '#':
               evt.target.setCustomValidity('хеш-тег начинается с символа # (решётка)');
               break;
-            case hashtagsArray[i].length > 20:
-              evt.target.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
+            case hashtagsArray[i].length > HASHTAG_LENGTH:
+              evt.target.setCustomValidity('максимальная длина одного хэш-тега HASHTAG_LENGTH символов, включая решётку');
               break;
             case hashtagsArray[i] === '#':
               evt.target.setCustomValidity('хеш-тег не может состоять только из одной решётки');
@@ -91,11 +87,12 @@
       document.body.appendChild(errorBlock);
       errorBlock.classList.remove('hidden');
       errorBlock.insertAdjacentHTML('beforeend', '<br>' + errorMessage);
-      errorBlock.style.display = 'block';
       errorBlock.style.zIndex = '10';
       document.body.style.overflow = 'hidden';
-      errorBlock.addEventListener('click', removeErrorBlock);
-      setTimeout(removeErrorBlock, 5000);
+      errorBlock.addEventListener('click', function () {
+        window.utils.removeErrorBlock(errorBlock);
+      });
+      setTimeout(window.utils.removeErrorBlock, 5000);
     }
   };
 
