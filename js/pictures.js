@@ -4,7 +4,7 @@
 
   var SHOWED_COMMENTS = 5;
 
-  var AVATARS_QTTY = 6;
+  var AVATARS_QTTY = [1, 6];
 
   var DESCRIPTIONS_LIST = ['Тестим новую камеру!',
     'Затусили с друзьями на море',
@@ -15,6 +15,7 @@
 
 
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture__link');
+  var errorBlock = document.querySelector('#picture').content.querySelector('.img-upload__message--error').cloneNode(false);
   var picturesBlock = document.querySelector('.pictures');
   var filtersBlock = document.querySelector('.img-filters');
 
@@ -33,6 +34,25 @@
   var bigPictureOverlay = document.querySelector('.big-picture');
   var bigPictureCancel = document.querySelector('#picture-cancel');
 
+  var picturesData = [];
+
+  var onSuccessLoad = function (data) {
+    picturesData = data;
+    generatePictures(picturesData);
+    filtersBlock.classList.remove('img-filters--inactive');
+  };
+
+  var onErrorLoad = function (errorMessage) {
+    document.body.appendChild(errorBlock);
+    errorBlock.classList.remove('hidden');
+    errorBlock.insertAdjacentHTML('beforeend', '<br>' + errorMessage);
+    errorBlock.style.zIndex = '10';
+    document.body.style.overflow = 'hidden';
+    errorBlock.addEventListener('click', function () {
+      window.utils.removeErrorBlock(errorBlock);
+    });
+    setTimeout(window.utils.removeErrorBlock, 5000);
+  };
 
   var removeOldComments = function () {
     var commentsLi = commentsBlock.querySelectorAll('li');
@@ -42,19 +62,10 @@
   var insertCommentNode = function (x) {
     commentsBlock.insertAdjacentHTML('afterbegin',
         '<li class="social__comment social__comment--text"><img class="social__picture" src="img/avatar-' +
-       window.utils.getRandomValue(1, AVATARS_QTTY) +
+       window.utils.getRandomValue(AVATARS_QTTY[0], AVATARS_QTTY[1]) +
       '.svg" alt="Аватар комментатора фотографии" width="35" height="35">' +
       x + '</li>');
   };
-
-  var picturesData = [];
-
-  var onSuccessLoad = function (data) {
-    picturesData = data;
-    generatePictures(picturesData);
-    filtersBlock.classList.remove('img-filters--inactive');
-  };
-
 
   var generatePictures = function (anyArray) {
 
@@ -176,14 +187,13 @@
   };
 
 
-  filters.addEventListener('click', onButtonUpdatePictures);
+  filters.addEventListener('click', window.utils.debounce(onButtonUpdatePictures));
   moreCommentsButton.addEventListener('click', onLoadMoreComments);
   bigPictureCancel.addEventListener('click', hideBigPicture);
   document.addEventListener('keydown', function (evt) {
     window.utils.isEscPress(evt, hideBigPicture);
   });
 
-
-  window.backend.getData(onSuccessLoad, function () {});
+  window.backend.getData(onSuccessLoad, onErrorLoad);
 
 })();

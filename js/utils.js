@@ -5,8 +5,8 @@
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-  var DEBOUNCE_INTERVAL = 5000;
-  var lastTimeout;
+  var DEBOUNCE_INTERVAL = 500;
+
 
   window.utils = {
 
@@ -74,17 +74,31 @@
       elem.addEventListener('mousedown', onMouseDown);
     },
 
+    debounce: function (fun) {
+      var lastTimeout = null;
+
+      return function () {
+        var args = arguments;
+        if (lastTimeout) {
+          window.clearTimeout(lastTimeout);
+        }
+        lastTimeout = window.setTimeout(function () {
+          fun.apply(null, args);
+        }, DEBOUNCE_INTERVAL);
+      };
+    },
+
     removeNodes: function (elem) {
       for (var i = 0; i < elem.length; i++) {
         elem[i].remove();
       }
     },
 
-    debounce: function (action) {
-      if (lastTimeout) {
-        window.clearTimeout(lastTimeout);
+    removeErrorBlock: function (elem) {
+      if (document.contains(elem)) {
+        elem.parentNode.removeChild(elem);
+        document.body.style.overflow = '';
       }
-      lastTimeout = window.setTimeout(action, DEBOUNCE_INTERVAL);
     }
   };
 

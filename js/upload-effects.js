@@ -156,7 +156,6 @@
   uploadInput.addEventListener('change', function () {
     openUploadBlock();
     window.utils.fileChooser(uploadInput.files[0], picPreview.querySelector('img'));
-
   });
 
 })();

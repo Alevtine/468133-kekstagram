@@ -5,6 +5,10 @@
   var URL_GET = 'https://js.dump.academy/kekstagram/data';
   var URL_POST = 'https://js.dump.academy/kekstagram';
   var TIMEOUT = 5000;
+  var Code = {
+    SUCCESS: 200,
+    BAD_REQUEST: 400
+  };
 
   var request = function (onSuccess, onError, method, url, data) {
 
@@ -14,10 +18,15 @@
     xhr.timeout = TIMEOUT;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
-        onSuccess(xhr.response);
-      } else {
-        onError('Получен ответ: ' + xhr.status + '. ' + xhr.response[0].errorMessage);
+      switch (xhr.status) {
+        case Code.SUCCESS:
+          onSuccess(xhr.response);
+          break;
+        case Code.BAD_REQUEST:
+          onError('Получен ответ: ' + xhr.status + '. ' + xhr.response[0].errorMessage);
+          break;
+        default:
+          onError('Получен ответ: ' + xhr.status);
       }
     });
 
