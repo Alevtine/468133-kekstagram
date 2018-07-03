@@ -3,8 +3,9 @@
 (function () {
 
   var SHOWED_COMMENTS = 5;
-
   var AVATARS_QTTY = [1, 6];
+  var NEW_PICS_QTTY = 10;
+  var ERRBLOCK_DELAY = 5000;
 
   var DESCRIPTIONS_LIST = ['Тестим новую камеру!',
     'Затусили с друзьями на море',
@@ -51,7 +52,7 @@
     errorBlock.addEventListener('click', function () {
       window.utils.removeErrorBlock(errorBlock);
     });
-    setTimeout(window.utils.removeErrorBlock, 5000);
+    setTimeout(window.utils.removeErrorBlock, ERRBLOCK_DELAY);
   };
 
   var removeOldComments = function () {
@@ -96,17 +97,17 @@
 
     if (evt.target.className === 'img-filters__button') {
       evt.target.classList.toggle('img-filters__button--active', true);
-      for (var i = 0; i < filterButtons.length; i++) {
-        if (evt.target !== filterButtons[i]) {
-          filterButtons[i].classList.remove('img-filters__button--active');
+      filterButtons.forEach(function (item) {
+        if (evt.target !== item) {
+          item.classList.remove('img-filters__button--active');
         }
-      }
+      });
     }
 
     switch (evt.target) {
       case newButton:
         var newPictures = picturesData.slice();
-        newPictures = window.utils.shuffle(newPictures).splice(0, 10);
+        newPictures = window.utils.shuffle(newPictures).splice(0, NEW_PICS_QTTY);
         generatePictures(newPictures);
         break;
       case popularButton:
@@ -175,24 +176,23 @@
     });
 
     document.body.classList.add('modal-open');
+    document.addEventListener('keydown', onEscHideBigPicture);
   };
-
 
   var hideBigPicture = function () {
     document.body.classList.remove('modal-open');
     bigPictureOverlay.classList.add('hidden');
-    document.removeEventListener('keydown', function (evt) {
-      window.utils.isEscPress(evt, hideBigPicture);
-    });
+    document.removeEventListener('keydown', onEscHideBigPicture);
+  };
+
+  var onEscHideBigPicture = function (evt) {
+    window.utils.isEscPress(evt, hideBigPicture);
   };
 
 
   filters.addEventListener('click', window.utils.debounce(onButtonUpdatePictures));
   moreCommentsButton.addEventListener('click', onLoadMoreComments);
   bigPictureCancel.addEventListener('click', hideBigPicture);
-  document.addEventListener('keydown', function (evt) {
-    window.utils.isEscPress(evt, hideBigPicture);
-  });
 
   window.backend.getData(onSuccessLoad, onErrorLoad);
 

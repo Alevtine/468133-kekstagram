@@ -4,6 +4,7 @@
 
   var HASHTAG_LENGTH = 20;
   var HASHTAGS_QTTY = 5;
+  var ERRBLOCK_DELAY = 5000;
 
   var hashtagInput = document.querySelector('.text__hashtags');
   var uploadForm = document.querySelector('#upload-select-image');
@@ -15,7 +16,7 @@
 
     evt.target.setCustomValidity('');
     evt.preventDefault();
-
+    hashtagInput.value = hashtagInput.value.trim();
     if (!hashtagInput.value) {
       hashtagInput.style.outline = '';
       return;
@@ -28,11 +29,15 @@
     } else if (hashtagsArray.length !== (hashtagInput.value.match(/#/g) || []).length) {
       evt.target.setCustomValidity('хэш-теги пробелами разделяйте');
     } else {
-      for (var i = 0; i < hashtagsArray.length; i++) {
+
+
+      hashtagsArray.forEach(function (item, i) {
+
         for (var j = i + 1; j < hashtagsArray.length; j++) {
           var flag;
-          if (hashtagsArray[i].toLowerCase() === hashtagsArray[j].toLowerCase()) {
+          if (item.toLowerCase() === hashtagsArray[j].toLowerCase()) {
             flag = true;
+            break;
           } else {
             flag = false;
           }
@@ -40,20 +45,21 @@
 
         if (flag) {
           evt.target.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
+          return;
         } else {
           switch (true) {
-            case hashtagsArray[i][0] !== '#':
+            case item[0] !== '#':
               evt.target.setCustomValidity('хеш-тег начинается с символа # (решётка)');
               break;
-            case hashtagsArray[i].length > HASHTAG_LENGTH:
-              evt.target.setCustomValidity('максимальная длина одного хэш-тега HASHTAG_LENGTH символов, включая решётку');
+            case item.length > HASHTAG_LENGTH:
+              evt.target.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
               break;
-            case hashtagsArray[i] === '#':
+            case item === '#':
               evt.target.setCustomValidity('хеш-тег не может состоять только из одной решётки');
               break;
           }
         }
-      }
+      });
     }
 
     if (hashtagInput.validity.valid) {
@@ -92,7 +98,7 @@
       errorBlock.addEventListener('click', function () {
         window.utils.removeErrorBlock(errorBlock);
       });
-      setTimeout(window.utils.removeErrorBlock, 5000);
+      setTimeout(window.utils.removeErrorBlock, ERRBLOCK_DELAY);
     }
   };
 
