@@ -27,12 +27,9 @@
     },
 
     shuffle: function (array) {
-      for (var i = 0; i < array.length; i++) {
-        var swapIdx = Math.floor(Math.random() * array.length);
-        var tmp = array[swapIdx];
-        array[swapIdx] = array[i];
-        array[i] = tmp;
-      }
+      array.sort(function (a, b) {
+        return Math.floor(Math.random() - 0.5);
+      });
       return array;
     },
 
@@ -89,9 +86,9 @@
     },
 
     removeNodes: function (elem) {
-      for (var i = 0; i < elem.length; i++) {
-        elem[i].remove();
-      }
+      elem.forEach(function (item) {
+        item.remove();
+      });
     },
 
     removeErrorBlock: function (elem) {

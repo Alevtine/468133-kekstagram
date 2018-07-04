@@ -31,6 +31,8 @@
 
   var uploadInput = document.querySelector('#upload-file');
   var uploadBlock = document.querySelector('.img-upload__overlay');
+  var uploadHashtagsText = uploadBlock.querySelector('.text__hashtags');
+  var uploadTextarea = document.querySelector('.text__description');
   var cancelUploadBlock = document.querySelector('#upload-cancel');
 
   var resizeMinusButton = document.querySelector('.resize__control--minus');
@@ -125,7 +127,7 @@
 
 
   var onEscCloseUpload = function (evt) {
-    if (document.querySelector('.text__hashtags') !== document.activeElement && document.querySelector('.text__description') !== document.activeElement) {
+    if (uploadHashtagsText !== document.activeElement && uploadTextarea !== document.activeElement) {
       window.utils.isEscPress(evt, closeUploadBlock);
     }
   };
@@ -134,7 +136,7 @@
     onClose: function () {
       uploadBlock.classList.add('hidden');
       picPreview.style.filter = '';
-      uploadBlock.querySelector('.text__hashtags').style.outline = '';
+      uploadHashtagsText.style.outline = '';
     },
 
     onOpen: function () {

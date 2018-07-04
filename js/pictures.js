@@ -52,7 +52,10 @@
     errorBlock.addEventListener('click', function () {
       window.utils.removeErrorBlock(errorBlock);
     });
-    setTimeout(window.utils.removeErrorBlock, ERRBLOCK_DELAY);
+    setTimeout(function () {
+      window.utils.removeErrorBlock(errorBlock);
+    },
+    ERRBLOCK_DELAY);
   };
 
   var removeOldComments = function () {
