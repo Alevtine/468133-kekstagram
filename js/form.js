@@ -26,11 +26,9 @@
 
     if (hashtagsArray.length > HASHTAGS_QTTY) {
       evt.target.setCustomValidity('нельзя указать больше пяти хэш-тегов');
-    } else if (hashtagsArray.length !== (hashtagInput.value.match(/#/g) || []).length) {
-      evt.target.setCustomValidity('хэш-теги пробелами разделяйте');
     } else {
 
-      hashtagsArray.forEach(function (item, i) {
+      hashtagsArray.some(function (item, i) {
 
         for (var j = i + 1; j < hashtagsArray.length; j++) {
           var flag;
@@ -44,10 +42,14 @@
 
         if (flag) {
           evt.target.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
+          return item;
         } else {
           switch (true) {
             case item[0] !== '#':
               evt.target.setCustomValidity('хеш-тег начинается с символа # (решётка)');
+              break;
+            case item.indexOf('#', 1) > 1:
+              evt.target.setCustomValidity('хэш-теги пробелами разделяйте');
               break;
             case item.length > HASHTAG_LENGTH:
               evt.target.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');

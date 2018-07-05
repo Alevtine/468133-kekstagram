@@ -46,7 +46,7 @@
     document.addEventListener('keydown', onEscCloseUpload);
   };
 
-  var closeUploadBlock = function () {
+  window.closeUploadBlock = function () {
     window.uploadEffects.onClose();
     document.removeEventListener('keydown', onEscCloseUpload);
   };
@@ -128,7 +128,7 @@
 
   var onEscCloseUpload = function (evt) {
     if (uploadHashtagsText !== document.activeElement && uploadTextarea !== document.activeElement) {
-      window.utils.isEscPress(evt, closeUploadBlock);
+      window.utils.isEscPress(evt, window.closeUploadBlock);
     }
   };
 
@@ -153,7 +153,7 @@
   effectsList.addEventListener('change', onInputEffectChange);
   resizeMinusButton.addEventListener('click', onResize);
   resizePlusButton.addEventListener('click', onResize);
-  cancelUploadBlock.addEventListener('click', closeUploadBlock);
+  cancelUploadBlock.addEventListener('click', window.closeUploadBlock);
 
   uploadInput.addEventListener('change', function () {
     openUploadBlock();

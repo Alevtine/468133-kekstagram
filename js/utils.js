@@ -27,23 +27,30 @@
     },
 
     shuffle: function (array) {
-      array.sort(function (a, b) {
+      array.sort(function () {
         return Math.floor(Math.random() - 0.5);
       });
       return array;
     },
 
     fileChooser: function (file, upload) {
-      var fileName = file.name.toLowerCase();
-      var matches = FILE_TYPES.some(function (item) {
-        return fileName.endsWith(item);
-      });
+      try {
+        var fileName = file.name.toLowerCase();
+        var matches = FILE_TYPES.some(function (item) {
+          return fileName.endsWith(item);
+        });
+      } catch (err) {
+        window.form.onError('Что-нибудь, а лучше изображение загрузить надо');
+      }
       if (matches) {
         var reader = new FileReader();
         reader.addEventListener('load', function () {
           upload.src = reader.result;
         });
         reader.readAsDataURL(file);
+      } else {
+        window.form.onError('Изображения загружайте');
+        window.closeUploadBlock();
       }
     },
 
@@ -95,6 +102,9 @@
       if (document.contains(elem)) {
         elem.parentNode.removeChild(elem);
         document.body.style.overflow = '';
+      }
+      if (elem.lastChild) {
+        elem.lastChild.remove();
       }
     }
   };
