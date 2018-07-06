@@ -59,6 +59,7 @@
               break;
           }
         }
+        return false;
       });
     }
 
@@ -92,7 +93,7 @@
     onError: function (errorMessage) {
       document.body.appendChild(errorBlock);
       errorBlock.classList.remove('hidden');
-      errorBlock.insertAdjacentHTML('beforeend', '<br>' + errorMessage);
+      errorBlock.insertAdjacentHTML('beforeend', '<div class="errorMessage">' + '<br>' + errorMessage + '</div>');
       errorBlock.style.zIndex = '10';
       document.body.style.overflow = 'hidden';
       errorBlock.addEventListener('click', function () {

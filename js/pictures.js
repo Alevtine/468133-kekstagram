@@ -5,7 +5,7 @@
   var SHOWED_COMMENTS = 5;
   var AVATARS_QTTY = [1, 6];
   var NEW_PICS_QTTY = 10;
-  var ERRBLOCK_DELAY = 5000;
+  var ERRBLOCK_DELAY = 50000;
 
   var DESCRIPTIONS_LIST = ['Тестим новую камеру!',
     'Затусили с друзьями на море',
@@ -72,6 +72,7 @@
   };
 
   var generatePictures = function (anyArray) {
+    var pictureFragment = document.createDocumentFragment();
 
     var addClickListener = function (item, pic) {
       pic.addEventListener('click', function (evt) {
@@ -86,9 +87,11 @@
       pictureElement.querySelector('img').src = item.url;
       pictureElement.querySelector('.picture__stat--likes').textContent = item.likes;
       pictureElement.querySelector('.picture__stat--comments').textContent = item.comments.length;
-      picturesBlock.appendChild(pictureElement);
       addClickListener(item, pictureElement);
+      pictureFragment.appendChild(pictureElement);
     });
+
+    picturesBlock.appendChild(pictureFragment);
 
     return anyArray;
   };

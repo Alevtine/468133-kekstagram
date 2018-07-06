@@ -41,6 +41,7 @@
         });
       } catch (err) {
         window.form.onError('Что-нибудь, а лучше изображение загрузить надо');
+        window.closeUploadBlock();
       }
       if (matches) {
         var reader = new FileReader();
@@ -80,7 +81,6 @@
 
     debounce: function (fun) {
       var lastTimeout = null;
-
       return function () {
         var args = arguments;
         if (lastTimeout) {
@@ -99,12 +99,12 @@
     },
 
     removeErrorBlock: function (elem) {
+      if (elem.lastChild.className === 'errorMessage') {
+        elem.lastChild.remove();
+      }
       if (document.contains(elem)) {
         elem.parentNode.removeChild(elem);
         document.body.style.overflow = '';
-      }
-      if (elem.lastChild) {
-        elem.lastChild.remove();
       }
     }
   };

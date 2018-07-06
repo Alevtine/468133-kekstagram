@@ -2,19 +2,19 @@
 
 (function () {
 
-  var SCALE_LIMITS = {
-    min: 0,
-    max: 453
+  var ScaleLimit = {
+    MIN: 0,
+    MAX: 453
   };
 
-  var EFFECTS_RANGE = {
-    min: 1,
-    max: 3
+  var EffectRange = {
+    MIN: 1,
+    MAX: 3
   };
 
-  var SIZE_RANGE = {
-    min: 25,
-    max: 100
+  var SizeRange = {
+    MIN: 25,
+    MAX: 100
   };
 
   var RESIZE_STEP = 25;
@@ -38,7 +38,7 @@
   var resizeMinusButton = document.querySelector('.resize__control--minus');
   var resizePlusButton = document.querySelector('.resize__control--plus');
   var resizeInput = document.querySelector('.resize__control--value');
-  var resizeValue = SIZE_RANGE.max;
+  var resizeValue = SizeRange.MAX;
 
 
   var openUploadBlock = function () {
@@ -61,25 +61,25 @@
     }
     picPreview.style.filter = '';
     scaleLevel.style.width = PERCENT_AMOUNT + '%';
-    pin.style.left = SCALE_LIMITS.max + 'px';
+    pin.style.left = ScaleLimit.MAX + 'px';
     scaleInput.setAttribute('value', '100');
   };
 
 
   var changeSaturation = function (endCoord) {
 
-    if (endCoord < SCALE_LIMITS.min) {
-      endCoord = SCALE_LIMITS.min;
+    if (endCoord < ScaleLimit.MIN) {
+      endCoord = ScaleLimit.MIN;
     }
-    if (endCoord > SCALE_LIMITS.max) {
-      endCoord = SCALE_LIMITS.max;
+    if (endCoord > ScaleLimit.MAX) {
+      endCoord = ScaleLimit.MAX;
     }
 
     pin.style.left = endCoord + 'px';
 
-    var slipStep = endCoord / SCALE_LIMITS.max;
+    var slipStep = endCoord / ScaleLimit.MAX;
     var saturationLevel = Math.floor(PERCENT_AMOUNT * slipStep);
-    var maxSlipValue = EFFECTS_RANGE.max * slipStep;
+    var maxSlipValue = EffectRange.MAX * slipStep;
 
     picPreview.classList.forEach(function (item) {
       switch (item) {
@@ -96,7 +96,7 @@
           picPreview.style.filter = 'blur' + '(' + maxSlipValue + 'px' + ')';
           break;
         case 'effects__preview--heat':
-          if (maxSlipValue > EFFECTS_RANGE.min) {
+          if (maxSlipValue > EffectRange.MIN) {
             picPreview.style.filter = 'brightness' + '(' + maxSlipValue + ')';
           }
           break;
@@ -111,12 +111,12 @@
   var onResize = function (evt) {
     switch (evt.target) {
       case resizeMinusButton:
-        if (resizeValue > SIZE_RANGE.min) {
+        if (resizeValue > SizeRange.MIN) {
           resizeValue -= RESIZE_STEP;
         }
         break;
       case resizePlusButton:
-        if (resizeValue < SIZE_RANGE.max) {
+        if (resizeValue < SizeRange.MAX) {
           resizeValue += RESIZE_STEP;
         }
         break;
@@ -135,6 +135,7 @@
   window.uploadEffects = {
     onClose: function () {
       uploadBlock.classList.add('hidden');
+      picPreview.src = '';
       picPreview.style.filter = '';
       uploadHashtagsText.style.outline = '';
     },
