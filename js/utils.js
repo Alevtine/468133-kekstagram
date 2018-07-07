@@ -39,20 +39,21 @@
         var matches = FILE_TYPES.some(function (item) {
           return fileName.endsWith(item);
         });
+        if (matches) {
+          var reader = new FileReader();
+          reader.addEventListener('load', function () {
+            upload.src = reader.result;
+          });
+          reader.readAsDataURL(file);
+        } else {
+          window.form.onError('Изображения загружайте');
+          window.closeUploadBlock();
+        }
       } catch (err) {
         window.form.onError('Что-нибудь, а лучше изображение загрузить надо');
         window.closeUploadBlock();
       }
-      if (matches) {
-        var reader = new FileReader();
-        reader.addEventListener('load', function () {
-          upload.src = reader.result;
-        });
-        reader.readAsDataURL(file);
-      } else {
-        window.form.onError('Изображения загружайте');
-        window.closeUploadBlock();
-      }
+
     },
 
     slider: function (elem, tune) {
@@ -100,7 +101,7 @@
 
     removeErrorBlock: function (elem) {
       if (elem.lastChild.className === 'errorMessage') {
-        elem.lastChild.remove();
+        elem.removeChild(elem.lastChild);
       }
       if (document.contains(elem)) {
         elem.parentNode.removeChild(elem);

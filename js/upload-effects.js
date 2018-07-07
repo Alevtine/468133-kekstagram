@@ -22,6 +22,7 @@
 
 
   var picPreview = document.querySelector('.img-upload__preview');
+  var imgPicPreview = picPreview.querySelector('img');
   var effectsList = document.querySelector('.effects__list');
   var pin = document.querySelector('.scale__pin ');
 
@@ -135,7 +136,7 @@
   window.uploadEffects = {
     onClose: function () {
       uploadBlock.classList.add('hidden');
-      picPreview.src = '';
+      imgPicPreview.src = '';
       picPreview.style.filter = '';
       uploadHashtagsText.style.outline = '';
     },
@@ -158,7 +159,7 @@
 
   uploadInput.addEventListener('change', function () {
     openUploadBlock();
-    window.utils.fileChooser(uploadInput.files[0], picPreview.querySelector('img'));
+    window.utils.fileChooser(uploadInput.files[0], imgPicPreview);
   });
 
 })();

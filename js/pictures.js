@@ -5,7 +5,7 @@
   var SHOWED_COMMENTS = 5;
   var AVATARS_QTTY = [1, 6];
   var NEW_PICS_QTTY = 10;
-  var ERRBLOCK_DELAY = 50000;
+  var ERRORBLOCK_DELAY = 5000;
 
   var DESCRIPTIONS_LIST = ['Тестим новую камеру!',
     'Затусили с друзьями на море',
@@ -55,7 +55,7 @@
     setTimeout(function () {
       window.utils.removeErrorBlock(errorBlock);
     },
-    ERRBLOCK_DELAY);
+    ERRORBLOCK_DELAY);
   };
 
   var removeOldComments = function () {

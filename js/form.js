@@ -9,8 +9,8 @@
   var hashtagInput = document.querySelector('.text__hashtags');
   var uploadForm = document.querySelector('#upload-select-image');
 
-  var errorBlockTemplate = document.querySelector('#picture').content.querySelector('.img-upload__message--error');
-  var errorBlock = errorBlockTemplate.cloneNode(true);
+  var errBlockTemplate = document.querySelector('#picture').content.querySelector('.img-upload__message--error');
+  var errBlock = errBlockTemplate.cloneNode(true);
 
   var onHashtagInput = function (evt) {
 
@@ -91,16 +91,16 @@
     },
 
     onError: function (errorMessage) {
-      document.body.appendChild(errorBlock);
-      errorBlock.classList.remove('hidden');
-      errorBlock.insertAdjacentHTML('beforeend', '<div class="errorMessage">' + '<br>' + errorMessage + '</div>');
-      errorBlock.style.zIndex = '10';
+      document.body.appendChild(errBlock);
+      errBlock.classList.remove('hidden');
+      errBlock.insertAdjacentHTML('beforeend', '<div class="errorMessage">' + '<br>' + errorMessage + '</div>');
+      errBlock.style.zIndex = '10';
       document.body.style.overflow = 'hidden';
-      errorBlock.addEventListener('click', function () {
-        window.utils.removeErrorBlock(errorBlock);
+      errBlock.addEventListener('click', function () {
+        window.utils.removeErrorBlock(errBlock);
       });
       setTimeout(function () {
-        window.utils.removeErrorBlock(errorBlock);
+        window.utils.removeErrorBlock(errBlock);
       },
       ERRBLOCK_DELAY);
     }
