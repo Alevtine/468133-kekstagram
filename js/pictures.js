@@ -46,7 +46,7 @@
   var onErrorLoad = function (errorMessage) {
     document.body.appendChild(errorBlock);
     errorBlock.classList.remove('hidden');
-    errorBlock.insertAdjacentHTML('beforeend', '<br>' + errorMessage);
+    errorBlock.insertAdjacentHTML('beforeend', '<div class="errorMessage">' + '<br>' + errorMessage + '</div>');
     errorBlock.style.zIndex = '10';
     document.body.style.overflow = 'hidden';
     errorBlock.addEventListener('click', function () {
@@ -63,12 +63,22 @@
     window.utils.removeNodes(commentsLi);
   };
 
-  var insertCommentNode = function (x) {
-    commentsBlock.insertAdjacentHTML('afterbegin',
-        '<li class="social__comment social__comment--text"><img class="social__picture" src="img/avatar-' +
-       window.utils.getRandomValue(AVATARS_QTTY[0], AVATARS_QTTY[1]) +
-      '.svg" alt="Аватар комментатора фотографии" width="35" height="35">' +
-      x + '</li>');
+  var insertCommentNode = function (commentsArray) {
+    var commentFragment = document.createDocumentFragment();
+
+    commentsArray.reverse();
+
+    commentsArray.forEach(function (it) {
+      var commentElement = document.createElement('li');
+      commentElement.classList.add('social__comment', 'social__comment--text');
+      commentElement.insertAdjacentHTML('afterbegin', '<img class="social__picture" src="img/avatar-' +
+     window.utils.getRandomValue(AVATARS_QTTY[0], AVATARS_QTTY[1]) +
+    '.svg" alt="Аватар комментатора фотографии" width="35" height="35">' +
+    it);
+      commentFragment.appendChild(commentElement);
+    });
+
+    commentsBlock.insertBefore(commentFragment, commentsBlock.firstChild);
   };
 
   var generatePictures = function (anyArray) {
@@ -155,9 +165,7 @@
 
     if (window.commentsData.length) {
       var commentsPlus = window.commentsData.splice(0, SHOWED_COMMENTS);
-      commentsPlus.forEach(function (item) {
-        insertCommentNode(item);
-      });
+      insertCommentNode(commentsPlus);
     }
 
     if (window.commentsData.length === 0) {
@@ -177,9 +185,7 @@
 
     removeOldComments();
     var comments = addComments(picture);
-    comments.forEach(function (it) {
-      insertCommentNode(it);
-    });
+    insertCommentNode(comments);
 
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', onEscHideBigPicture);
